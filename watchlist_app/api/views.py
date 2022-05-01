@@ -31,9 +31,8 @@ class ReviewCreate(generics.CreateAPIView):
         watchlist = WatchList.objects.get(pk=pk)
 
         review_user = self.request.user
-        review_queryset = Review.objects.filter(
-            watchlist=watchlist, review_user=review_user
-        )
+        review_queryset = Review.objects.filter(watchlist=watchlist,
+                                                review_user=review_user)
 
         if review_queryset.exists():
             raise ValidationError("You have already reviewed this movie!")
@@ -41,9 +40,8 @@ class ReviewCreate(generics.CreateAPIView):
         if watchlist.number_rating == 0:
             watchlist.avg_rating = serializer.validated_data["rating"]
         else:
-            watchlist.avg_rating = (
-                watchlist.avg_rating + serializer.validated_data["rating"]
-            ) / 2
+            watchlist.avg_rating = (watchlist.avg_rating +
+                                    serializer.validated_data["rating"]) / 2
 
         watchlist.number_rating = watchlist.number_rating + 1
         watchlist.save()
@@ -78,7 +76,6 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 #     def get(self, request, *args, **kwargs):
 #         return self.retrieve(request, *args, **kwargs)
 
-
 # class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
 #     queryset = Review.objects.all()
 #     serializer_class = ReviewSerializer
@@ -88,6 +85,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 #
 #     def post(self, request, *args, **kwargs):
 #         return self.create(request, *args, **kwargs)
+
 
 # below ModelViewSet class contains all get,post and get, put, delete
 class StreamPlatformVS(viewsets.ModelViewSet):
@@ -119,6 +117,7 @@ class StreamPlatformVS(viewsets.ModelViewSet):
 
 
 class StreamPlatformAV(APIView):
+
     def get(self, request):
         platform = StreamPlatform.objects.all()
         serializer = StreamPlatformSerializer(platform, many=True)
@@ -142,13 +141,13 @@ class StreamPlatformAV(APIView):
 
 
 class StreamPlatformDetailAV(APIView):
+
     def get(self, request, pk):
         try:
             stream = StreamPlatform.objects.get(pk=pk)
         except StreamPlatform.DoesNotExist:
-            return Response(
-                {"error": "StreamPlatform not found"}, status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({"error": "StreamPlatform not found"},
+                            status=status.HTTP_404_NOT_FOUND)
 
         serializer = StreamPlatformSerializer(stream)
         return Response(serializer.data)
@@ -160,7 +159,8 @@ class StreamPlatformDetailAV(APIView):
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         stream = StreamPlatform.objects.get(pk=pk)
@@ -170,6 +170,7 @@ class StreamPlatformDetailAV(APIView):
 
 # class based views
 class WatchListAV(APIView):
+
     def get(self, request):
         movies = WatchList.objects.all()
         serializer = WatchListSerializer(movies, many=True)
@@ -185,13 +186,13 @@ class WatchListAV(APIView):
 
 
 class WatchListDetailAV(APIView):
+
     def get(self, request, pk):
         try:
             movies = WatchList.objects.get(pk=pk)
         except WatchList.DoesNotExist:
-            return Response(
-                {"error": "WatchList not found"}, status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({"error": "WatchList not found"},
+                            status=status.HTTP_404_NOT_FOUND)
 
         serializer = WatchListSerializer(movies)
         return Response(serializer.data)
@@ -203,7 +204,8 @@ class WatchListDetailAV(APIView):
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         movies = WatchList.objects.get(pk=pk)
@@ -225,7 +227,6 @@ class WatchListDetailAV(APIView):
 #             return Response(serializer.data)
 #         else:
 #             return Response(serializer.error)
-
 
 # @api_view(['GET', 'PUT', 'DELETE'])
 # def movie_details(request, pk):
