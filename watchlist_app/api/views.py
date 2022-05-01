@@ -1,19 +1,17 @@
-from rest_framework import status, mixins, generics, viewsets
+from rest_framework import generics, mixins, status, viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
-
+from rest_framework.permissions import (IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 # from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
-from watchlist_app.models import WatchList, StreamPlatform, Review
-from watchlist_app.api.serializers import (
-    WatchListSerializer,
-    StreamPlatformSerializer,
-    ReviewSerializer,
-)
 from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
+from watchlist_app.api.serializers import (ReviewSerializer,
+                                           StreamPlatformSerializer,
+                                           WatchListSerializer)
+from watchlist_app.models import Review, StreamPlatform, WatchList
 
 
 class ReviewCreate(generics.CreateAPIView):
