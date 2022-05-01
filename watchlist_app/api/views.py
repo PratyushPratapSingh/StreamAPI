@@ -1,13 +1,18 @@
 from rest_framework import status, mixins, generics, viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
+
 # from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from watchlist_app.models import WatchList, StreamPlatform, Review
-from watchlist_app.api.serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
+from watchlist_app.api.serializers import (
+    WatchListSerializer,
+    StreamPlatformSerializer,
+    ReviewSerializer,
+)
 from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
 
 
@@ -18,21 +23,23 @@ class ReviewCreate(generics.CreateAPIView):
         return Review.objects.all()
 
     def perform_create(self, serializer):
-        pk = self.kwargs.get('pk')
+        pk = self.kwargs.get("pk")
         watchlist = WatchList.objects.get(pk=pk)
 
         review_user = self.request.user
         review_queryset = Review.objects.filter(
-            watchlist=watchlist, review_user=review_user)
+            watchlist=watchlist, review_user=review_user
+        )
 
         if review_queryset.exists():
             raise ValidationError("You have already reviewed this movie!")
 
         if watchlist.number_rating == 0:
-            watchlist.avg_rating = serializer.validated_data['rating']
+            watchlist.avg_rating = serializer.validated_data["rating"]
         else:
             watchlist.avg_rating = (
-                watchlist.avg_rating + serializer.validated_data['rating'])/2
+                watchlist.avg_rating + serializer.validated_data["rating"]
+            ) / 2
 
         watchlist.number_rating = watchlist.number_rating + 1
         watchlist.save()
@@ -47,7 +54,7 @@ class ReviewList(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        pk = self.kwargs['pk']
+        pk = self.kwargs["pk"]
         return Review.objects.filter(watchlist=pk)
 
 
@@ -82,6 +89,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 class StreamPlatformVS(viewsets.ModelViewSet):
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
+
 
 # Viewset
 # class StreamPlatformVS(viewsets.ViewSet):
@@ -130,12 +138,13 @@ class StreamPlatformAV(APIView):
 
 
 class StreamPlatformDetailAV(APIView):
-
     def get(self, request, pk):
         try:
             stream = StreamPlatform.objects.get(pk=pk)
         except StreamPlatform.DoesNotExist:
-            return Response({'error': 'StreamPlatform not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "StreamPlatform not found"}, status=status.HTTP_404_NOT_FOUND
+            )
 
         serializer = StreamPlatformSerializer(stream)
         return Response(serializer.data)
@@ -157,7 +166,6 @@ class StreamPlatformDetailAV(APIView):
 
 # class based views
 class WatchListAV(APIView):
-
     def get(self, request):
         movies = WatchList.objects.all()
         serializer = WatchListSerializer(movies, many=True)
@@ -173,12 +181,13 @@ class WatchListAV(APIView):
 
 
 class WatchListDetailAV(APIView):
-
     def get(self, request, pk):
         try:
             movies = WatchList.objects.get(pk=pk)
         except WatchList.DoesNotExist:
-            return Response({'error': 'WatchList not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "WatchList not found"}, status=status.HTTP_404_NOT_FOUND
+            )
 
         serializer = WatchListSerializer(movies)
         return Response(serializer.data)
