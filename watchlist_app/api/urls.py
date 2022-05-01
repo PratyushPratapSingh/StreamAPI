@@ -1,10 +1,15 @@
-from django.urls import include, path
+from django.urls import include
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from watchlist_app.api.views import (ReviewCreate, ReviewDetail, ReviewList,
-                                     StreamPlatformAV, StreamPlatformDetailAV,
-                                     StreamPlatformVS, WatchListAV,
-                                     WatchListDetailAV)
+from watchlist_app.api.views import ReviewCreate
+from watchlist_app.api.views import ReviewDetail
+from watchlist_app.api.views import ReviewList
+from watchlist_app.api.views import StreamPlatformAV
+from watchlist_app.api.views import StreamPlatformDetailAV
+from watchlist_app.api.views import StreamPlatformVS
+from watchlist_app.api.views import WatchListAV
+from watchlist_app.api.views import WatchListDetailAV
 
 # from watchlist_app.api.views import movie_list, movie_details
 # from watchlist_app.api.views import MovieListAV, MovieDetailAV
