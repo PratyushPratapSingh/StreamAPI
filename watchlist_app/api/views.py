@@ -41,8 +41,8 @@ class ReviewCreate(generics.CreateAPIView):
 class ReviewList(generics.ListAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    # permission_classes = [IsAuthenticated]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -55,7 +55,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = [IsAuthenticated]
     # permission_classes = [IsAuthenticatedOrReadOnly]
     # permission_classes = [AdminOrReadOnly]
-    permission_classes = [ReviewUserOrReadOnly]
+    # permission_classes = [ReviewUserOrReadOnly]
 
 
 # class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
