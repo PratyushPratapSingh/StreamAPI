@@ -52,6 +52,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# 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
+
 ROOT_URLCONF = 'watchmate.urls'
 
 TEMPLATES = [
