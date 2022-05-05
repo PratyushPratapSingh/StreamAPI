@@ -8,11 +8,13 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 
 from watchlist_app.models import WatchList, StreamPlatform, Review
 from watchlist_app.api.serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
-from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
+from watchlist_app.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 
 
+# class based view
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Review.objects.all()
@@ -52,6 +54,8 @@ class ReviewList(generics.ListAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [IsReviewUserOrReadOnly]
+
     # permission_classes = [IsAuthenticated]
     # permission_classes = [IsAuthenticatedOrReadOnly]
     # permission_classes = [AdminOrReadOnly]
@@ -80,6 +84,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 class StreamPlatformVS(viewsets.ModelViewSet):
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 # Viewset
 # class StreamPlatformVS(viewsets.ViewSet):
@@ -105,6 +110,8 @@ class StreamPlatformVS(viewsets.ModelViewSet):
 
 
 class StreamPlatformAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
+
     def get(self, request):
         platform = StreamPlatform.objects.all()
         serializer = StreamPlatformSerializer(platform, many=True)
@@ -128,6 +135,7 @@ class StreamPlatformAV(APIView):
 
 
 class StreamPlatformDetailAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
 
     def get(self, request, pk):
         try:
@@ -155,6 +163,7 @@ class StreamPlatformDetailAV(APIView):
 
 # class based views
 class WatchListAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
 
     def get(self, request):
         movies = WatchList.objects.all()
@@ -171,6 +180,7 @@ class WatchListAV(APIView):
 
 
 class WatchListDetailAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
 
     def get(self, request, pk):
         try:
@@ -195,6 +205,8 @@ class WatchListDetailAV(APIView):
         movies.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+# Function based view
 
 # @api_view(['GET', 'POST'])
 # def movie_list(request):

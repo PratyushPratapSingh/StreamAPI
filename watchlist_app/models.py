@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
+
+# Only platform can be added by admin only
 class StreamPlatform(models.Model):
     name = models.CharField(max_length=30)
     about = models.CharField(max_length=150)
@@ -13,6 +15,7 @@ class StreamPlatform(models.Model):
         return self.name
 
 
+# Only admin have access to change/add/edit/update Watchlist
 class WatchList(models.Model):
     title = models.CharField(max_length=50)
     storyline = models.CharField(max_length=200)
@@ -26,6 +29,7 @@ class WatchList(models.Model):
         return self.title
 
 
+# Reviews can be added by individual users or admin
 class Review(models.Model):
     review_user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
