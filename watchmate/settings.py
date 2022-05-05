@@ -143,3 +143,11 @@ REST_FRAMEWORK = {
         'user': '7/day'
     }
 }
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ]
+# }
+
+>>>>>>> 91326d97861042125863d9eeaa5d023fae7c7420
